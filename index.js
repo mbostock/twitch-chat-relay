@@ -5,11 +5,7 @@ const EventEmitter = require("events");
 
 const port = process.env.PORT || 5000;
 
-const channels = [
-  "jlengstorf",
-  "nl_kripp",
-  "summit1g"
-];
+const channels = process.env.TWITCH_CHANNELS.split(",");
 
 let socket;
 let timeout;
@@ -21,10 +17,8 @@ let emitter = new EventEmitter();
   socket.onopen = () => {
     delay = 250;
     socket.send(`PASS ${process.env.TWITCH_OAUTH_TOKEN}`);
-    socket.send(`NICK heloworld`);
-    socket.send(`JOIN #jlengstorf`);
-    socket.send(`JOIN #nl_kripp`);
-    socket.send(`JOIN #summit1g`);
+    socket.send(`NICK ${process.env.TWITCH_NICK}`);
+    for (const channel of channels) socket.send(`JOIN #${channel}`);
   };
   socket.onclose = () => {
     delay *= 2;
