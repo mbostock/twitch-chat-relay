@@ -18,6 +18,7 @@ let emitter = new EventEmitter();
     delay = 250;
     socket.send(`PASS ${process.env.TWITCH_OAUTH_TOKEN}`);
     socket.send(`NICK ${process.env.TWITCH_NICK}`);
+    socket.send(`CAP REQ :twitch.tv/tags`);
     for (const channel of channels) socket.send(`JOIN #${channel}`);
   };
   socket.onclose = () => {
@@ -29,16 +30,29 @@ let emitter = new EventEmitter();
   };
 })();
 
-function parseMessage(message) {
-  const i = message.indexOf(" ");
-  const j = message.indexOf(" ", i + 1);
-  const k = message.indexOf(" ", j + 1);
+function parseMessage(data) {
+  let i = 0, j;
+  let tags;
+  let user;
+  let type;
+  let channel;
+  let message;
+  if (data[0] === "@") j = data.indexOf(" ", i), tags = parseTags(data.slice(i + 1, j)), i = j + 1;
+  j = data.indexOf(" ", i), user = data.slice(i + 1, data.indexOf("!", i)), i = j + 1;
+  j = data.indexOf(" ", i), type = data.slice(i, j), i = j + 1;
+  j = data.indexOf(" ", i), channel = data.slice(i + 1, j), i = j + 1;
+  j = data.indexOf(" ", i), message = data.slice(i + 1, -2);
   return {
-    user: message.slice(1, message.indexOf("!")),
-    type: message.slice(i + 1, j),
-    channel: message.slice(j + 2, k),
-    message: message.slice(k + 2, -2)
+    tags,
+    user,
+    type,
+    channel,
+    message
   };
+}
+
+function parseTags(data) {
+  return Object.fromEntries(data.split(";").map(d => d.split(/=/)));
 }
 
 process.on("SIGTERM", () => {
