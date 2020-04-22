@@ -11,5 +11,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/mbostock/twitch-chat-relay"
+  },
+  "dependencies": {
+    "ws": "^7.2.3"
   }
 }
