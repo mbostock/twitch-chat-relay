@@ -1,0 +1,15 @@
+{
+  "name": "twitch-chat-relay",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": "12.x"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mbostock/twitch-chat-relay"
+  }
+}
