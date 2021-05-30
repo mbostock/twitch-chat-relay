@@ -14,6 +14,6 @@
     "url": "https://github.com/mbostock/twitch-chat-relay"
   },
   "dependencies": {
-    "ws": "^7.2.3"
+    "ws": "^7.4.6"
   }
 }
